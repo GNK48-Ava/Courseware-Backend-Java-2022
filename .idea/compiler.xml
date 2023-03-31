@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Lesson7-SpringSecurity" target="1.8" />
+      <module name="Lesson7-SpringSecurity" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

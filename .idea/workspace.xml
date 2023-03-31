@@ -4,27 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="67597704-e985-43ec-a394-5b92e65b00da" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/img/image-20230314182554704.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/img/image-20230314184002953.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/img/image-20230314184311328.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/img/image-20230314184534140.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/img/image-20230314184734793.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/img/image-20230316110831099.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/Author.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/Book.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/StreamDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/common/distinct/DistinctDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/common/filter/FilterDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/common/limit/LimitDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/common/map/MapDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/common/sort/SortDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/finish/count/CountDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/finish/foreach/ForeachDemo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/src/main/java/com/yxyl/springboot/streamapi/finish/maxmin/MaxDemo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Lesson7-SpringSecurity/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Lesson7-SpringSecurity/README.md" afterDir="false" />
-    </list>
+    <list default="true" id="67597704-e985-43ec-a394-5b92e65b00da" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -52,29 +32,37 @@
     <option name="autoscrollToSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;11&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/yxyl/文档/GitHub/Courseware-Backend-Java-2022/Lesson7-SpringSecurity/img&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.12597656&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.25463918&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;MavenSettings&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;e274fba88f3ae9ad6270d6840d59a0b2&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "jdk.selected.JAVA_MODULE": "11",
+    "last_opened_file_path": "H:/Courseware-Backend-Java-2022/Lesson7-SpringSecurity/src/main/java/com/yxyl",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.12597656",
+    "project.structure.side.proportion": "0.25463918",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "spring.configuration.checksum": "e274fba88f3ae9ad6270d6840d59a0b2",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="H:\Courseware-Backend-Java-2022\Lesson7-SpringSecurity\src\main\java\com\yxyl" />
       <recent name="$PROJECT_DIR$/Lesson7-SpringSecurity/img" />
       <recent name="$PROJECT_DIR$" />
     </key>
@@ -149,6 +137,12 @@
       <workItem from="1679027098590" duration="10000" />
       <workItem from="1679318265716" duration="1004000" />
       <workItem from="1679319957022" duration="924000" />
+      <workItem from="1679667341261" duration="174000" />
+      <workItem from="1679667604083" duration="134000" />
+      <workItem from="1679667751076" duration="810000" />
+      <workItem from="1679703310094" duration="2844000" />
+      <workItem from="1679706729865" duration="2265000" />
+      <workItem from="1679709211026" duration="90000" />
     </task>
     <servers />
   </component>

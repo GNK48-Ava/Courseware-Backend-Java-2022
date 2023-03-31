@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
@@ -32,28 +33,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public List<User> listAll() {
-        return list();
+        System.out.println("SecurityContextHolder.getContext().getAuthentication().getPrincipal() = " + SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        List<User> list = list();
+        return list;
     }
 
     @Override
     public UserResponse login(User user) {
         UsernamePasswordAuthenticationToken
-                authenticationToken = new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword());
+                authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        //能到这里，说明数据库中是有这个用户的,但是还得判断password是否匹配
-        if (!passwordEncoder.matches(user.getPassword(),loginUser.getPassword())) {
-            //如果密码不匹配
-            throw new RuntimeException("密码错误");
-        }
+
+        String studentId = loginUser.getUser().getId().toString();
+
+        String token = JwtUtil.createJWT(studentId);
         
-        //获取userId
-        String userId = loginUser.getUser().getId().toString();
-        String token = JwtUtil.createJWT(userId);
-        //TODO 这里还可以吧loginUser信息放在Redis里面，方便以后的功能模块会用到
-        redisCache.setCacheObject(REDIS_KEY + userId, loginUser);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        
+        //这里还可以吧loginUser信息放在Redis里面，方便以后的功能模块会用到
+        redisCache.setCacheObject(REDIS_KEY + studentId, loginUser, 30, TimeUnit.MINUTES);
+
         return new UserResponse(token, loginUser.getUser());
     }
 

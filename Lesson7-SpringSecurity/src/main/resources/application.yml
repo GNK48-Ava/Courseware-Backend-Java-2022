@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 18080
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -9,4 +9,4 @@ spring:
   redis:
     host: 43.139.21.49
     port: 6379
-    password: yc088088
+    password: yc6125

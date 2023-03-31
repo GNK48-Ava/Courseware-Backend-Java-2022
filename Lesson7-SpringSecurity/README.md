@@ -6,6 +6,42 @@ Spring Security是一个功能强大且高度可定制的身份验证和访问�
 
 Spring Security是一个专注于为Java应用程序提供身份验证和授权的框架。像所有Spring项目一样，Spring Security的真正力量在于它可以很容易地扩展以满足定制需求
 
+登录认证的大概流程：
+
+![](https://img-blog.csdnimg.cn/img_convert/3d54566fb251f8272604083fc9045979.png)
+
+
+
+springsecurity底层实现是通过一系列的过滤器链完成登录验证和授权等功能，主要是使用到下面15个过滤器
+
+![](https://img-blog.csdnimg.cn/img_convert/442e3df49d2c0b3b98953efd12100f02.png)
+
+它的调用流程：
+
+![](https://img-blog.csdnimg.cn/img_convert/29c42605f96dad3ebb92d7443da32d91.png)
+
+### JWT
+
+什么是 JSON Web Token？
+
+> JSON Web 令牌 （JWT） 是一种开放标准 （RFC 7519），它定义了一种紧凑且独立的方式，用于在各方之间以 JSON 对象的形式安全地传输信息。此信息可以验证和信任，因为它是经过数字签名的。JWT 可以使用密钥（使用 HMAC 算法）或使用 RSA 或 ECDSA 的公钥/私钥对进行签名。
+
+尽管 JWT 可以加密以提供各方之间的保密性，但我们将专注于签名令牌。签名令牌可以验证其中包含的声明的完整性，而加密令牌则向其他方隐藏这些声明。当使用公钥/私钥对对令牌进行签名时，签名还证明只有持有私钥的一方才是签名的一方。
+
+特点：跨平台 跨语言 轻量级json 对象进行数据传输， 数字签名保证安全性
+
+应用场景：
+
+- 授权：这是使用 JWT 的最常见方案。用户登录后，每个后续请求都将包含 JWT，允许用户访问使用该令牌允许的路由、服务和资源。单点登录是当今广泛使用 JWT 的一项功能，因为它的开销很小，并且能够跨不同域轻松使用。
+
+- 信息交换：JSON Web 令牌是在各方之间安全传输信息的好方法。由于 JWT 可以签名（例如，使用公钥/私钥对），因此您可以确定发件人是他们所说的人。此外，由于签名是使用标头和有效负载计算的，因此您还可以验证内容是否未被篡改
+
+![](https://img-blog.csdnimg.cn/img_convert/bbc194ef9e2e0ea63e8ef90939b8fd51.png)
+
+从本质上来说，JWT 就像是一种生成加密用户身份信息的 Token，更安全也更灵活。
+
+
+
 ### 开始工作
 
 > 1. ```java
@@ -89,7 +125,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
         http
                 .cors()//允许跨域
                 .and()
@@ -190,22 +225,17 @@ private final RedisCache redisCache;
  @Override
     public UserResponse login(User user) {
         UsernamePasswordAuthenticationToken
-                authenticationToken = new UsernamePasswordAuthenticationToken(user.getId(), user.getPassword());
+                authenticationToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
         Authentication authenticate = authenticationManager.authenticate(authenticationToken);
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-        //能到这里，说明数据库中是有这个用户的,但是还得判断password是否匹配
-        if (!passwordEncoder.matches(user.getPassword(),loginUser.getPassword())) {
-            //如果密码不匹配
-            throw new RuntimeException("密码错误");
-        }
+
+        String studentId = loginUser.getUser().getId().toString();
+
+        String token = JwtUtil.createJWT(studentId);
         
-        //获取userId
-        String userId = loginUser.getUser().getId().toString();
-        String token = JwtUtil.createJWT(userId);
-        //TODO 这里还可以吧loginUser信息放在Redis里面，方便以后的功能模块会用到
-        redisCache.setCacheObject(REDIS_KEY + userId, loginUser);
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        
+        //这里还可以吧loginUser信息放在Redis里面，方便以后的功能模块会用到
+        redisCache.setCacheObject(REDIS_KEY + studentId, loginUser, 30, TimeUnit.MINUTES);
+
         return new UserResponse(token, loginUser.getUser());
     }
 ```
@@ -238,14 +268,14 @@ public class UserDetailServiceImpl implements UserDetailsService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         //在“认证授权管理器的认证”方法之前，先判断是否有这个用户
-        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getId, id));
+        User user = userMapper.selectOne(new LambdaQueryWrapper<User>().eq(User::getUsername, username));
         if (user == null) {
+            System.out.println("用户不存在");
             throw new UsernameNotFoundException("用户不存在");
         }
-        //TODO 用户权限(Role)封装
-
+        //TODO 查询权限信息封装
         return new LoginUser(user);
     }
 }
@@ -359,30 +389,30 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         //这里就是重写拦截方法
-        try {
-            //取出 header 中的 token 进行校验
-            String token = request.getHeader("token");
-            if (token != null && !"".equals(token)) {
-                //解析获取userId
-                Claims claims = JwtUtil.parseJWT(token);
-                String studentId = claims.getSubject();
-                //通过userID获取redis中的缓存信息
-                LoginUser loginUser = redisCache.getCacheObject(REDIS_KEY + studentId);
-                if (loginUser != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    //token失效了
-                    //刷新令牌
-                    redisCache.setCacheObject(REDIS_KEY + studentId, loginUser);
-                    //从redis中获取loginUse信息放到上下文中
-                    UsernamePasswordAuthenticationToken
-                            authenticationToken = new UsernamePasswordAuthenticationToken(loginUser.getUser().getId(), loginUser.getPassword());
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                }
-            }
-        } catch (Exception e) {
+        String token = request.getHeader("token");
+        if (null == token || "".equals(token)) {
+            // token不存在 放行 并且直接return 返回
             filterChain.doFilter(request, response);
             return;
         }
-        // 如果token为空直接下一步过滤器，此时上线文中无用户信息，所有在后续认证环节失败
+        // 解析toke
+        String userId = null;
+        try {
+            Claims claims = JwtUtil.parseJWT(token);
+            userId = claims.getSubject();
+        } catch (Exception e) {
+            throw new RuntimeException("token非法");
+        }
+        // 获取userid 从redis中获取用户信息
+        LoginUser loginUser = redisCache.getCacheObject(REDIS_KEY + userId);
+        if (Objects.isNull(loginUser)) {
+            throw new RuntimeException("用户未登录");
+        }
+
+        //将用户信息存入到SecurityContextHolder
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        // 放行
         filterChain.doFilter(request, response);
     }
 }
@@ -399,8 +429,6 @@ private JwtAuthenticationTokenFilter authenticationTokenFilter;
 		//...
         //添加前置过滤波器
         http.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        http.formLogin()
-                .usernameParameter("id").disable();
 		//..
     }
 ```
@@ -430,6 +458,7 @@ Ok这个时候我们的拦截器就配置完成力
 ### 留个小作业
 
 1. 这里我们介绍了怎么通过Security进行认证的过程，请你下来自己研究授权的过程，比如哪些接口只能哪些角色的用户才能访问之类的……
+1. 梳理一下整个SpringSecurity的认证过程，以包括但不限于流程图的方式呈现
 
 
 
